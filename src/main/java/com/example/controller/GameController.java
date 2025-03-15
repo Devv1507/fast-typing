@@ -36,15 +36,26 @@ public class GameController {
         currentWord.bind(gameState.currentWordProperty());
         level.bind(gameState.levelProperty());
         timeLeft.bindBidirectional(gameState.timeLeftProperty());
-        startNewGame();
+        startNewRound();
     }
 
     /**
      * Inicia un nuevo juego, generando una nueva palabra y comenzando el temporizador.
      */
-    public void startNewGame() {
+    public void startNewRound() {
         generateNewWord();
         startTimer();
+    }
+
+    /**
+     * Reinicia el estado del juego cuando el jugador pierde.
+     */
+    private void resetGame() {
+        gameState.setLevel(1);
+        this.errorsProperty().set(0);
+        generateNewWord();
+        gameState.setTimeLeft(20);
+        startNewRound();
     }
 
     /**
@@ -58,22 +69,24 @@ public class GameController {
      * Inicia el temporizador para la ronda actual.
      */
     private void startTimer() {
-        if (timer != null) {
-            timer.stop(); // Detiene el temporizador existente si está en ejecución
-        }
         int initialTime = calculateInitialTime();
         gameState.setTimeLeft(initialTime);
-        timer = new Timeline(
-                new KeyFrame(Duration.seconds(1), event -> {
-                    int currentTime = gameState.getTimeLeft();
-                    if (currentTime > 0) {
-                        gameState.setTimeLeft(currentTime - 1);
-                    } else {
-                        endRound();
-                    }
-                })
-        );
-        timer.setCycleCount(Timeline.INDEFINITE);
+
+        if (timer == null) {
+            timer = new Timeline(
+                    new KeyFrame(Duration.seconds(1), event -> {
+                        int currentTime = gameState.getTimeLeft();
+                        if (currentTime > 0) {
+                            gameState.setTimeLeft(currentTime - 1);
+                        } else {
+                            endRound();
+                        }
+                    })
+            );
+            timer.setCycleCount(Timeline.INDEFINITE);
+        } else {
+            timer.stop();
+        }
         timer.play();
     }
 
@@ -87,8 +100,7 @@ public class GameController {
             levelUp();
             return true;
         } else {
-            errorsProperty().set(errorsProperty().get() + 1);
-            endRound(); // endRound se llamará incluso con submit
+            this.handleIncorrectWord();
             return false;
         }
     }
@@ -98,7 +110,22 @@ public class GameController {
      */
     private void levelUp() {
         gameState.setLevel(gameState.getLevel() + 1);
-        startNewGame();
+        startNewRound();
+    }
+
+    /**
+     * Gestiona el caso en el que el jugador introduce una palabra incorrecta.
+     * Si se supera el límite de errores (4), el juego se reinicia invocando el método resetGame.
+     * De lo contrario, genera una nueva palabra para la ronda actual e inicia el cronómetro para el siguiente intento.
+     */
+    private void handleIncorrectWord() {
+        errorsProperty().set(errorsProperty().get() + 1);
+        if (errorsProperty().get() >= 4) {
+            resetGame();
+        } else {
+            gameState.setCurrentWord(wordGenerator.generateWord());
+            this.startTimer();
+        }
     }
 
     /**
@@ -108,14 +135,12 @@ public class GameController {
      */
     private void endRound() {
         timer.stop();
-        if (timeLeft.get() == 0 && !submitWord(Main.getInputText())) {
-            errorsProperty().set(errorsProperty().get() + 1);
+        String inputText = Main.getInputText();
+        if (!inputText.isEmpty() && inputText.equals(gameState.getCurrentWord())) {
+            levelUp();
+            return;
         }
-        if (errorsProperty().get() >= 4) {
-            System.out.println("¡Juego terminado en GameController!");
-        } else {
-            startNewGame();
-        }
+        this.handleIncorrectWord();
     }
 
     /**
@@ -131,7 +156,6 @@ public class GameController {
             time -= 2;
         }
 
-        // Asegura que el tiempo mínimo sea 2
         return Math.max(2, time);
     }
 
