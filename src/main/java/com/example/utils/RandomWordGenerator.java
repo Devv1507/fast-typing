@@ -5,12 +5,14 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import com.example.interfaces.IWordGenerator;
 import com.google.gson.Gson;
 
 /**
  * Utility class to generate random words using the Random Word API.
  */
-public class RandomWordGenerator {
+public class RandomWordGenerator implements IWordGenerator {
 
     private final HttpClient client = HttpClient.newHttpClient();
     private final String apiUrl = "https://random-word-api.herokuapp.com/word?lang=es"; // Adjust as needed
@@ -22,6 +24,7 @@ public class RandomWordGenerator {
      * @throws IOException If an I/O error occurs when sending or receiving the request.
      * @throws InterruptedException If the operation is interrupted.
      */
+    @Override
     public String generateWord() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl))
