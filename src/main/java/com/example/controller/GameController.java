@@ -20,6 +20,7 @@ public class GameController {
     private final StringProperty currentWord = new SimpleStringProperty("");
     private final IntegerProperty level = new SimpleIntegerProperty(1);
     private final IntegerProperty timeLeft = new SimpleIntegerProperty(20);
+    private final IntegerProperty errors = new SimpleIntegerProperty(0); // Error counter (global)
     private Timeline timer;
 
     public GameController() {
@@ -27,13 +28,11 @@ public class GameController {
         wordGenerator = new RandomWordGenerator();
         currentWord.bind(gameState.currentWordProperty());
         level.bind(gameState.levelProperty());
-        timeLeft.bind(gameState.timeLeftProperty());
+        timeLeft.bindBidirectional(gameState.timeLeftProperty());
         startNewGame();
     }
 
-    private void startNewGame() {
-        gameState.setLevel(1);
-        gameState.setTimeLeft(20);
+    public void startNewGame() {
         generateNewWord();
         startTimer();
     }
@@ -43,6 +42,11 @@ public class GameController {
     }
 
     private void startTimer() {
+        if (timer != null) {
+            timer.stop(); // Stop the existing timer if it's running
+        }
+        int initialTime = calculateInitialTime();
+        gameState.setTimeLeft(initialTime); // Establecer el valor a través de la propiedad en GameState
         timer = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     int currentTime = gameState.getTimeLeft();
@@ -57,23 +61,47 @@ public class GameController {
         timer.play();
     }
 
-    public void submitWord(String typedWord) {
+    public boolean submitWord(String typedWord) {
         if (typedWord != null && typedWord.equals(gameState.getCurrentWord())) {
             levelUp();
+            return true;
         } else {
-            //TODO: Handle wrong word
+            errorsProperty().set(errorsProperty().get() + 1);
+            endRound(); // endRound will be called even with submit
+            return false;
         }
     }
 
     private void levelUp() {
         gameState.setLevel(gameState.getLevel() + 1);
-        gameState.setTimeLeft(20);
-        generateNewWord();
+        startNewGame();
     }
 
     private void endRound() {
         timer.stop();
-        //TODO: Handle end of round
+        if (timeLeft.get() == 0) {
+            errorsProperty().set(errorsProperty().get() + 1);
+            System.out.println("Tiempo agotado! Errores: " + errorsProperty().get());
+        }
+        if (errorsProperty().get() >= 4) {
+            System.out.println("Game over in GameController!");
+            // No iniciar un nuevo juego aquí, ya que se acabaron los intentos
+        } else {
+            startNewGame();
+        }
+    }
+
+    private int calculateInitialTime() {
+        int currentLevel = gameState.getLevel();
+        int time = 20;
+
+        // Decrease time every 5 levels
+        for (int i = 5; i <= currentLevel; i += 5) {
+            time -= 2;
+        }
+
+        // Ensure the minimum time is 2
+        return Math.max(2, time);
     }
 
     public StringProperty currentWordProperty() {
@@ -87,4 +115,13 @@ public class GameController {
     public IntegerProperty timeLeftProperty() {
         return timeLeft;
     }
+
+    public IntegerProperty errorsProperty() {
+        return errors;
+    }
+
+    public int getErrors() {
+        return errors.get();
+    }
+
 }
