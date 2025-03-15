@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
@@ -100,14 +101,13 @@ public class GameController {
 
     /**
      * Finaliza la ronda actual.
-     * En caso de que el tiempo se agote, se evalua la palabra y, en caso de un error, se añade un error al contador.
+     * En caso de que el tiempo se agote, se evalua la palabra y, en caso de un error, se añade al contador.
      * En caso de que el contador de errores llegue a 4, el juego deja de reiniciarse.
      */
     private void endRound() {
         timer.stop();
-        if (timeLeft.get() == 0) {
-            errorsProperty().set(errorsProperty().get() + 1); // ACAAAAAAAAA
-            System.out.println("Tiempo agotado! Errores: " + errorsProperty().get());
+        if (timeLeft.get() == 0 && !submitWord(Main.getInputText())) {
+            errorsProperty().set(errorsProperty().get() + 1);
         }
         if (errorsProperty().get() >= 4) {
             System.out.println("Game over in GameController!");

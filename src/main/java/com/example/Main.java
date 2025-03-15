@@ -22,6 +22,7 @@ import javafx.stage.Stage;
  * Lanza la aplicación JavaFX.
  */
 public class Main extends Application {
+    public static TextField inputField;
     private final GameController controller = new GameController();
     private Button restartButton;
     private Button submitButton;
@@ -30,7 +31,6 @@ public class Main extends Application {
     private Label levelLabel;
     private Label phraseLabel;
     private Label timeLabel;
-    private TextField inputField;
     private ImageView eclipseImage;
     private final String[] eclipseImagePaths = {
             "/images/eclipse_0.png",
@@ -39,6 +39,7 @@ public class Main extends Application {
             "/images/eclipse_75.png",
             "/images/eclipse_100.png"
     };
+
 
     /**
      * Método principal para iniciar la aplicación JavaFX.
@@ -123,6 +124,14 @@ public class Main extends Application {
 
         bottomBox.getChildren().addAll(gameOverMessage, restartButton, messageLabel);
         view.setBottom(bottomBox);
+    }
+
+    /**
+     * Retrieves the text contained in the input field.
+     * @return The current text from the input field.
+     */
+    public static String getInputText() {
+        return inputField.getText();
     }
 
     /**
