@@ -7,6 +7,7 @@ import com.example.interfaces.IWordGenerator;
 
 /**
  * Clase de utilidad para generar palabras aleatorias utilizando una API externa o una lista local.
+ * @author David Esteban Valencia
  */
 public class RandomWordGenerator implements IWordGenerator {
     private final List<String> localWords = List.of(

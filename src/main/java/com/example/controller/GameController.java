@@ -12,18 +12,63 @@ import com.example.utils.GameState;
 import com.example.utils.RandomWordGenerator;
 
 /**
- * Controlador para el juego de escritura rápida (fast typing).
+ * La clase GameController gestiona la lógica central de un juego de palabras,
+ * incluyendo el seguimiento del estado del juego, generación de palabras aleatorias,
+ * control del tiempo, nivel, y manejo de errores.
+ * Esta clase actúa como el controlador que vincula la lógica del juego con
+ * la interfaz de usuario, proporcionando propiedades observables para
+ * interactuar con componentes de la vista en tiempo real.
  * @author David Esteban Valencia
- * @version 1.0.0
  */
 public class GameController {
-
+    /**
+     * Representa el estado actual del juego.
+     * Se utiliza para realizar un seguimiento y gestionar información a nivel de juego,
+     * como la palabra actual, el nivel y el tiempo restante durante la partida.
+     * @see GameState
+     */
     private final GameState gameState;
+    /**
+     * Una instancia de RandomWordGenerator responsable de generar palabras aleatorias
+     * utilizadas durante las rondas del juego. Este componente es crucial para proporcionar
+     * la característica central del juego de generación de palabras como parte de la lógica
+     * del GameController.
+     * @see RandomWordGenerator
+     */
     private final RandomWordGenerator wordGenerator;
+    /**
+     * Representa la palabra que se muestra actualmente en el juego, que el jugador debe escribir.
+     * Esta propiedad es observable y se puede enlazar a elementos de la interfaz de usuario
+     * para actualizaciones en tiempo real. El valor de esta propiedad se restablece o actualiza
+     * durante cada nueva ronda.
+     */
     private final StringProperty currentWord = new SimpleStringProperty("");
+    /**
+     * Representa el nivel actual del juego.
+     * Es una propiedad observable utilizada para realizar un seguimiento y actualizar el nivel
+     * dinámicamente durante la progresión del juego.
+     */
     private final IntegerProperty level = new SimpleIntegerProperty(1);
+    /**
+     * Representa el tiempo restante para la ronda de juego actual.
+     * Esta propiedad se utiliza para realizar un seguimiento y actualizar el temporizador de cuenta
+     * regresiva durante el juego. Comienza con un valor inicial de 20 segundos y disminuye
+     * a medida que avanza el temporizador. El valor es observable, lo que permite que los
+     * componentes o listeners de la interfaz de usuario reaccionen cuando cambia el tiempo.
+     */
     private final IntegerProperty timeLeft = new SimpleIntegerProperty(20);
+    /**
+     * Representa el contador global de errores durante el juego.
+     * Esta propiedad observable almacena el número actual de errores cometidos
+     * por el jugador. Es utilizada para realizar un seguimiento del progreso y para
+     * determinar si se ha alcanzado el límite de errores permitido en el juego.
+     */
     private final IntegerProperty errors = new SimpleIntegerProperty(0); // Contador de errores (global)
+    /**
+     * El temporizador utilizado para controlar la cuenta regresiva de la ronda actual.
+     * Gestiona los eventos basados en el tiempo durante el juego, como actualizar
+     * el tiempo restante y activar el final de una ronda cuando se agota el tiempo.
+     */
     private Timeline timer;
 
     /**
