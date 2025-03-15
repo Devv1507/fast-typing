@@ -167,4 +167,56 @@ public class GameView {
         return view;
     }
 
+
+    private void handleSubmit() {
+        String typedWord = inputField.getText();
+        if (!controller.submitWord(typedWord)) {
+            updateEclipseImage(controller.getErrors());
+        }
+    }
+    private void startNewGame() {
+        // Re-enable input field and submit button
+        inputField.setDisable(false);
+        submitButton.setDisable(false);
+
+        // Hide game over message and restart button
+        gameOverMessage.setVisible(false);
+        restartButton.setVisible(false);
+
+        // Set initial values for start new Game
+        controller.errorsProperty().set(0);
+        updateEclipseImage(controller.getErrors());
+
+        // Set initial time and then start new game
+        controller.startNewGame(); // Add method to reset the game
+
+        inputField.clear();
+    }
+    private void endGame() {
+        // Show game over message and restart button
+        gameOverMessage.setText("¡Ups, se te acabaron los intentos, trata de nuevo!");
+        gameOverMessage.setFont(Font.font(20));
+        gameOverMessage.setVisible(true);
+        restartButton.setVisible(true);
+
+        // Disable input field and submit button
+        inputField.setDisable(true);
+        submitButton.setDisable(true);
+    }
+
+    private void restartGame() {
+        //Start new game
+        startNewGame();
+    }
+
+    private void setupEventHandlers() {
+        submitButton.setOnAction(event -> handleSubmit());
+        inputField.setOnAction(event -> handleSubmit()); // Enter key
+        controller.errorsProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.intValue() >= 4) {
+                endGame(); //Show Game over screen
+            }
+            updateEclipseImage(newVal.intValue()); // Always update eclipse, regardless if the user end game now
+        });
+    }
 }
