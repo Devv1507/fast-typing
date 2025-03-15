@@ -10,27 +10,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
 /**
  * View class for the Typing Speed Game.
  */
 public class GameView {
-    private GameController controller;
-    private BorderPane view;
-    private Label levelLabel;
-    private Label timeLabel;
-    private Label phraseLabel;
-    private TextField inputField;
-    private Button submitButton;
-    private Label messageLabel;
-    private Circle eclipse;
-    private AnchorPane errorPane; // Panel para mostrar los iconos de error
-    private ImageView eclipseImage; // Imagen para representar el progreso del eclipse
-    private final int MAX_ERRORS = 4;
     private Button restartButton; // Botón para reiniciar el juego
+    private Button submitButton;
+    private BorderPane view;
+    private GameController controller;
     private Label gameOverMessage; // Mensaje de fin de juego
+    private Label messageLabel;
+    private Label levelLabel;
+    private Label phraseLabel;
+    private Label timeLabel;
+    private TextField inputField;
+    private ImageView eclipseImage; // Imagen para representar el progreso del eclipse
 
     public GameView() {
         controller = new GameController();
@@ -117,49 +113,19 @@ public class GameView {
         levelLabel.textProperty().bind(controller.levelProperty().asString("%d"));
         timeLabel.textProperty().bind(controller.timeLeftProperty().asString("%d"));
         phraseLabel.textProperty().bind(controller.currentWordProperty());
-        // TODO: Bind eclipse progress (Implement in Controller)
     }
 
     private Image loadImage(String path) {
-        try {
-            Image image = new Image(getClass().getResourceAsStream(path));
-            if (image.isError()) {
-                System.err.println("Error al cargar la imagen: " + path + " - " + image.getException().getMessage());
-                return null; // Or return a default image
-            }
-            return image;
-        } catch (Exception e) {
-            System.err.println("Excepción al cargar la imagen: " + path + " - " + e.getMessage());
-            return null; // Or return a default image
-        }
-    }
-
-    private void initializeEclipseImage() {
-        // Load the initial eclipse image (eclipse_0.png)
-        Image image = loadImage(eclipseImagePaths[0]);
-        if (image != null) {
-            eclipseImage.setImage(image);
-        } else {
-            // Handle the case where the image could not be loaded
-            System.err.println("No se pudo cargar la imagen inicial del eclipse.");
-        }
+        return new Image(getClass().getResourceAsStream(path));
     }
 
     private void updateEclipseImage(int errorCount) {
         if (errorCount >= 0 && errorCount < eclipseImagePaths.length) {
             Image image = loadImage(eclipseImagePaths[errorCount]);
-            if (image != null) {
-                eclipseImage.setImage(image);
-            } else {
-                System.err.println("No se pudo cargar la imagen del eclipse para el error count: " + errorCount);
-            }
+            eclipseImage.setImage(image);
         } else if (errorCount >= eclipseImagePaths.length) {
             Image image = loadImage(eclipseImagePaths[eclipseImagePaths.length - 1]);
-            if (image != null) {
-                eclipseImage.setImage(image);
-            } else {
-                System.err.println("No se pudo cargar la imagen final del eclipse.");
-            }
+            eclipseImage.setImage(image);
         }
     }
 
