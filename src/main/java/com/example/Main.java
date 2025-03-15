@@ -1,6 +1,7 @@
 package com.example;
 import com.example.controller.GameController;
 
+import com.example.utils.EclipseProgress;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,27 +20,68 @@ import javafx.stage.Stage;
 /**
  * Clase principal para la aplicación del juego de escritura.
  * Lanza la aplicación JavaFX.
- * @author David Esteban Valencia
- * @version 1.0.0
  */
 public class Main extends Application {
+    /**
+     * Un TextField estático utilizado para la entrada del usuario en la aplicación.
+     * Este campo permite a los usuarios ingresar texto, que puede ser manejado o recuperado
+     * según sea necesario por la lógica de la aplicación.
+     */
     public static TextField inputField;
+    /**
+     * Representa el controlador principal del juego para gestionar la lógica y las interacciones del juego.
+     * Este controlador es responsable de coordinar el estado del juego de la aplicación,
+     * incluyendo el manejo de la entrada del jugador, las reglas del juego y la gestión del progreso.
+     * Sirve como la interfaz central entre la vista de la aplicación y la mecánica del juego subyacente.
+     * @see GameController
+     */
     private final GameController controller = new GameController();
+    /**
+     * Botón para reiniciar el juego, restableciendo el estado del juego y permitiendo al jugador
+     * comenzar una nueva sesión. Este botón normalmente se habilita al final de una sesión de juego.
+     */
     private Button restartButton;
+    /**
+     * Representa el botón utilizado para activar el envío de la entrada del jugador.
+     */
     private Button submitButton;
+    /**
+     * Representa el contenedor de diseño principal de la escena de la aplicación.
+     * BorderPane organiza sus hijos en cinco regiones: superior, inferior, izquierda, derecha y centro,
+     * lo que permite una interfaz de usuario estructurada y adaptable.
+     */
     private BorderPane view;
+    /**
+     * Un Label utilizado para mostrar el mensaje de fin de juego cuando el juego termina.
+     * Este mensaje indica que el juego ha concluido y no es posible seguir jugando.
+     */
     private Label gameOverMessage;
+    /**
+     * Representa la etiqueta utilizada para mostrar el nivel o etapa actual del juego en la vista de la aplicación.
+     */
     private Label levelLabel;
+    /**
+     * Label que representa la frase o el mensaje actual que se muestra en la aplicación.
+     */
     private Label phraseLabel;
+    /**
+     * Label utilizada para mostrar el tiempo restante o la cuenta regresiva durante la sesión de juego.
+     */
     private Label timeLabel;
+    /**
+     * Un elemento ImageView utilizado para mostrar una imagen de eclipse en la aplicación.
+     * Este campo es parte de la interfaz de usuario y puede ser manipulado o actualizado
+     * a medida que avanza el juego o según la interacción del usuario.
+     */
     private ImageView eclipseImage;
-    private final String[] eclipseImagePaths = {
-            "/images/eclipse_0.png",
-            "/images/eclipse_25.png",
-            "/images/eclipse_50.png",
-            "/images/eclipse_75.png",
-            "/images/eclipse_100.png"
-    };
+    /**
+     * Almacena una instancia de la clase EclipseProgress que gestiona la visualización
+     * del progreso basado en niveles de error dentro de la aplicación. Este objeto
+     * permite rastrear el número de errores cometidos y proporciona imágenes
+     * relacionadas con el estado actual del progreso del eclipse.
+     * @see EclipseProgress
+     */
+    private final EclipseProgress eclipseProgress = new EclipseProgress();
 
     /**
      * Método principal para iniciar la aplicación JavaFX.
@@ -82,6 +124,7 @@ public class Main extends Application {
         eclipseImage = new ImageView();
         eclipseImage.setFitWidth(200); // Ajusta el tamaño de la imagen
         eclipseImage.setFitHeight(200);
+        eclipseImage.setImage(eclipseProgress.getEclipseImage());
 
         HBox eclipseBox = new HBox(10, eclipseImage); // Eclipse en el centro superior
         eclipseBox.setAlignment(Pos.TOP_CENTER);
@@ -141,6 +184,9 @@ public class Main extends Application {
         levelLabel.textProperty().bind(controller.levelProperty().asString("%d"));
         timeLabel.textProperty().bind(controller.timeLeftProperty().asString("%d"));
         phraseLabel.textProperty().bind(controller.currentWordProperty());
+        eclipseProgress.errorsProperty().addListener((obs, oldVal, newVal) -> {
+            eclipseImage.setImage(eclipseProgress.getEclipseImage());
+        });
     }
 
     /**
@@ -156,15 +202,15 @@ public class Main extends Application {
      * Actualiza la imagen del eclipse basada en el número de errores.
      * @param errorCount El número de errores.
      */
-    private void updateEclipseImage(int errorCount) {
-        if (errorCount >= 0 && errorCount < eclipseImagePaths.length) {
-            Image image = loadImage(eclipseImagePaths[errorCount]);
-            eclipseImage.setImage(image);
-        } else if (errorCount >= eclipseImagePaths.length) {
-            Image image = loadImage(eclipseImagePaths[eclipseImagePaths.length - 1]);
-            eclipseImage.setImage(image);
-        }
-    }
+//    private void updateEclipseImage(int errorCount) {
+//        if (errorCount >= 0 && errorCount < eclipseImagePaths.length) {
+//            Image image = loadImage(eclipseImagePaths[errorCount]);
+//            eclipseImage.setImage(image);
+//        } else if (errorCount >= eclipseImagePaths.length) {
+//            Image image = loadImage(eclipseImagePaths[eclipseImagePaths.length - 1]);
+//            eclipseImage.setImage(image);
+//        }
+//    }
 
     /**
      * Maneja el envío de la palabra escrita por el jugador.
@@ -172,7 +218,8 @@ public class Main extends Application {
     private void handleSubmit() {
         String typedWord = inputField.getText();
         if (!controller.submitWord(typedWord)) {
-            updateEclipseImage(controller.getErrorsCount());
+//            updateEclipseImage(controller.getErrorsCount());
+            eclipseProgress.setErrors(controller.getErrorsCount());
         }
         inputField.clear();
     }
@@ -190,9 +237,10 @@ public class Main extends Application {
 
         // Establece los valores iniciales para el nuevo juego
         controller.errorsProperty().set(0);
-        updateEclipseImage(controller.getErrorsCount());
+        // updateEclipseImage(controller.getErrorsCount());
+        eclipseProgress.setErrors(controller.getErrorsCount());
 
-        controller.startNewGame();
+        controller.startNewRound();
     }
 
     /**
@@ -216,9 +264,9 @@ public class Main extends Application {
         inputField.setOnAction(event -> handleSubmit()); // Tecla Enter
         controller.errorsProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.intValue() >= 4) {
-                endGame(); // Muestra la pantalla de fin de juego
+                endGame();
             }
-            updateEclipseImage(newVal.intValue()); // Siempre actualiza la imagen del eclipse, independientemente de si el usuario pierde el juego ahora
+            eclipseProgress.setErrors(newVal.intValue());
         });
     }
 
