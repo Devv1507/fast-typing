@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -190,35 +189,11 @@ public class Main extends Application {
     }
 
     /**
-     * Carga una imagen desde la ruta especificada.
-     * @param path La ruta de la imagen.
-     * @return La imagen cargada.
-     */
-    private Image loadImage(String path) {
-        return new Image(getClass().getResourceAsStream(path));
-    }
-
-    /**
-     * Actualiza la imagen del eclipse basada en el número de errores.
-     * @param errorCount El número de errores.
-     */
-//    private void updateEclipseImage(int errorCount) {
-//        if (errorCount >= 0 && errorCount < eclipseImagePaths.length) {
-//            Image image = loadImage(eclipseImagePaths[errorCount]);
-//            eclipseImage.setImage(image);
-//        } else if (errorCount >= eclipseImagePaths.length) {
-//            Image image = loadImage(eclipseImagePaths[eclipseImagePaths.length - 1]);
-//            eclipseImage.setImage(image);
-//        }
-//    }
-
-    /**
      * Maneja el envío de la palabra escrita por el jugador.
      */
     private void handleSubmit() {
         String typedWord = inputField.getText();
         if (!controller.submitWord(typedWord)) {
-//            updateEclipseImage(controller.getErrorsCount());
             eclipseProgress.setErrors(controller.getErrorsCount());
         }
         inputField.clear();
@@ -237,7 +212,6 @@ public class Main extends Application {
 
         // Establece los valores iniciales para el nuevo juego
         controller.errorsProperty().set(0);
-        // updateEclipseImage(controller.getErrorsCount());
         eclipseProgress.setErrors(controller.getErrorsCount());
 
         controller.startNewRound();
