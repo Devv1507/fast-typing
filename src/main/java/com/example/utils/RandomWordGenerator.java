@@ -10,19 +10,18 @@ import com.example.interfaces.IWordGenerator;
 import com.google.gson.Gson;
 
 /**
- * Utility class to generate random words using the Random Word API.
+ * Clase de utilidad para generar palabras aleatorias utilizando la API Random Word.
  */
 public class RandomWordGenerator implements IWordGenerator {
 
     private final HttpClient client = HttpClient.newHttpClient();
-    private final String apiUrl = "https://random-word-api.herokuapp.com/word?lang=es"; // Adjust as needed
+    private final String apiUrl = "https://random-word-api.herokuapp.com/word?lang=es"; // Ajustar según sea necesario
 
     /**
-     * Generates a random word from an external API.
-     *
-     * @return A randomly selected word.
-     * @throws IOException If an I/O error occurs when sending or receiving the request.
-     * @throws InterruptedException If the operation is interrupted.
+     * Genera una palabra aleatoria desde una API externa.
+     * @return Una palabra seleccionada aleatoriamente.
+     * @throws IOException Si ocurre un error de E/S al enviar o recibir la solicitud.
+     * @throws InterruptedException Si la operación es interrumpida.
      */
     @Override
     public String generateWord() {
@@ -39,17 +38,13 @@ public class RandomWordGenerator implements IWordGenerator {
                 if (words != null && words.length > 0) {
                     return words[0];
                 } else {
-                    // Handle case where the API returns an empty array
-                    return "defaultWord"; // Or throw an exception
+                    return "palabra predeterminada";
                 }
             } else {
-                // Handle error codes from the API
-                System.err.println("API returned status code: " + response.statusCode());
-                return "defaultWord"; // Or throw an exception
+                return "palabra predeterminada";
             }
         } catch (IOException | InterruptedException e) {
-            System.err.println("Error fetching word from API: " + e.getMessage());
-            throw new RuntimeException("Failed to fetch word from API", e);
+            throw new RuntimeException("No se pudo obtener la palabra de la API", e);
         }
     }
 }

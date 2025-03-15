@@ -16,7 +16,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-
 /**
  * Clase principal para la aplicación del juego de escritura.
  * Lanza la aplicación JavaFX.
@@ -40,7 +39,6 @@ public class Main extends Application {
             "/images/eclipse_100.png"
     };
 
-
     /**
      * Método principal para iniciar la aplicación JavaFX.
      * @param primaryStage El escenario principal para la aplicación.
@@ -54,7 +52,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(view, 800, 600);
 
-        primaryStage.setTitle("Typing Speed Game");
+        primaryStage.setTitle("Fast Typing Game");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -66,24 +64,24 @@ public class Main extends Application {
         view = new BorderPane();
         view.setPadding(new Insets(20));
 
-        // Top Section: Level and Time
+        // Sección superior: Etiquetas de Nivel y Tiempo
         HBox topBox = new HBox(20);
-        topBox.setAlignment(Pos.TOP_RIGHT); // Align to top right
-        levelLabel = new Label("Level: 1");
-        timeLabel = new Label("Time: 20");
+        topBox.setAlignment(Pos.TOP_RIGHT); // Alineado a la parte superior derecha
+        levelLabel = new Label("Nivel: 1");
+        timeLabel = new Label("Tiempo: 20");
 
-        HBox levelBox = new HBox(10, new Label("Nivel: "), levelLabel); // Nivel on top left
+        HBox levelBox = new HBox(10, new Label("Nivel: "), levelLabel); // Nivel en la parte superior izquierda
         levelBox.setAlignment(Pos.TOP_LEFT);
 
-        HBox timeBox = new HBox(10, new Label("Tiempo: "), timeLabel); // Time on top right
+        HBox timeBox = new HBox(10, new Label("Tiempo: "), timeLabel); // Tiempo en la parte superior derecha
         timeBox.setAlignment(Pos.TOP_RIGHT);
 
-        // Eclipse Image
+        // Imagen del eclipse
         eclipseImage = new ImageView();
         eclipseImage.setFitWidth(200); // Ajusta el tamaño de la imagen
         eclipseImage.setFitHeight(200);
 
-        HBox eclipseBox = new HBox(10, eclipseImage); // Eclipse on top center
+        HBox eclipseBox = new HBox(10, eclipseImage); // Eclipse en el centro superior
         eclipseBox.setAlignment(Pos.TOP_CENTER);
 
         BorderPane topPane = new BorderPane();
@@ -93,10 +91,10 @@ public class Main extends Application {
 
         view.setTop(topPane);
 
-        // Center Section: Phrase and Input
+        // Sección central: Frase e ingreso de texto
         VBox centerBox = new VBox(10);
         centerBox.setAlignment(Pos.CENTER);
-        phraseLabel = new Label("Phrase");
+        phraseLabel = new Label("Frase");
         phraseLabel.setFont(Font.font(48));
         inputField = new TextField();
         inputField.setMaxWidth(600);
@@ -109,26 +107,26 @@ public class Main extends Application {
         centerBox.getChildren().addAll(phraseLabel, inputField, submitButton);
         view.setCenter(centerBox);
 
-        // Bottom Section: Messages
+        // Sección inferior: Mensajes
         Label messageLabel = new Label();
         VBox bottomBox = new VBox(10);
         bottomBox.setAlignment(Pos.CENTER);
 
         gameOverMessage = new Label();
-        gameOverMessage.setVisible(false); // Initially hidden
+        gameOverMessage.setVisible(false); // Inicialmente oculto
 
-        restartButton = new Button("Re-intentar");
+        restartButton = new Button("Reintentar");
         restartButton.setFont(Font.font(18));
         restartButton.setOnAction(event -> startNewGame());
-        restartButton.setVisible(false); // Initially hidden
+        restartButton.setVisible(false); // Inicialmente oculto
 
         bottomBox.getChildren().addAll(gameOverMessage, restartButton, messageLabel);
         view.setBottom(bottomBox);
     }
 
     /**
-     * Retrieves the text contained in the input field.
-     * @return The current text from the input field.
+     * Obtiene el texto contenido en el campo de entrada.
+     * @return El texto actual del campo de entrada.
      */
     public static String getInputText() {
         return inputField.getText();
@@ -189,7 +187,7 @@ public class Main extends Application {
         restartButton.setVisible(false);
 
         // Establece los valores iniciales para el nuevo juego
-        controller.errorsProperty().set(0); // ACAAAAAAAAA
+        controller.errorsProperty().set(0);
         updateEclipseImage(controller.getErrorsCount());
 
         controller.startNewGame();
@@ -213,12 +211,12 @@ public class Main extends Application {
      */
     private void setupEventHandlers() {
         submitButton.setOnAction(event -> handleSubmit());
-        inputField.setOnAction(event -> handleSubmit()); // Enter key
+        inputField.setOnAction(event -> handleSubmit()); // Tecla Enter
         controller.errorsProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.intValue() >= 4) {
-                endGame(); //Show Game over screen
+                endGame(); // Muestra la pantalla de fin de juego
             }
-            updateEclipseImage(newVal.intValue()); // Always update eclipse, regardless if the user end game now
+            updateEclipseImage(newVal.intValue()); // Siempre actualiza la imagen del eclipse, independientemente de si el usuario pierde el juego ahora
         });
     }
 

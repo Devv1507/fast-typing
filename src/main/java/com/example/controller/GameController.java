@@ -12,7 +12,7 @@ import com.example.utils.GameState;
 import com.example.utils.RandomWordGenerator;
 
 /**
- * Controlador para el juego de fast typing (escritura rápida)
+ * Controlador para el juego de escritura rápida (fast typing).
  */
 public class GameController {
 
@@ -21,7 +21,7 @@ public class GameController {
     private final StringProperty currentWord = new SimpleStringProperty("");
     private final IntegerProperty level = new SimpleIntegerProperty(1);
     private final IntegerProperty timeLeft = new SimpleIntegerProperty(20);
-    private final IntegerProperty errors = new SimpleIntegerProperty(0); // Error counter (global)
+    private final IntegerProperty errors = new SimpleIntegerProperty(0); // Contador de errores (global)
     private Timeline timer;
 
     /**
@@ -57,7 +57,7 @@ public class GameController {
      */
     private void startTimer() {
         if (timer != null) {
-            timer.stop(); // Stop the existing timer if it's running
+            timer.stop(); // Detiene el temporizador existente si está en ejecución
         }
         int initialTime = calculateInitialTime();
         gameState.setTimeLeft(initialTime);
@@ -77,7 +77,7 @@ public class GameController {
 
     /**
      * Valida la palabra escrita por el jugador.
-     * @param typedWord La palabra escrita por el jugador en el TextField.
+     * @param typedWord La palabra escrita por el jugador en el campo de texto.
      * @return true si la palabra es correcta, false si es incorrecta.
      */
     public boolean submitWord(String typedWord) {
@@ -86,7 +86,7 @@ public class GameController {
             return true;
         } else {
             errorsProperty().set(errorsProperty().get() + 1);
-            endRound(); // endRound will be called even with submit
+            endRound(); // endRound se llamará incluso con submit
             return false;
         }
     }
@@ -101,8 +101,8 @@ public class GameController {
 
     /**
      * Finaliza la ronda actual.
-     * En caso de que el tiempo se agote, se evalua la palabra y, en caso de un error, se añade al contador.
-     * En caso de que el contador de errores llegue a 4, el juego deja de reiniciarse.
+     * Si el tiempo se agota, se evalúa la palabra y, en caso de un error, se añade al contador.
+     * Si el contador de errores llega a 4, el juego deja de reiniciarse.
      */
     private void endRound() {
         timer.stop();
@@ -110,7 +110,7 @@ public class GameController {
             errorsProperty().set(errorsProperty().get() + 1);
         }
         if (errorsProperty().get() >= 4) {
-            System.out.println("Game over in GameController!");
+            System.out.println("¡Juego terminado en GameController!");
         } else {
             startNewGame();
         }
@@ -124,12 +124,12 @@ public class GameController {
         int currentLevel = gameState.getLevel();
         int time = 20;
 
-        // Decrease time every 5 levels
+        // Disminuye el tiempo cada 5 niveles
         for (int i = 5; i <= currentLevel; i += 5) {
             time -= 2;
         }
 
-        // Ensure the minimum time is 2
+        // Asegura que el tiempo mínimo sea 2
         return Math.max(2, time);
     }
 
