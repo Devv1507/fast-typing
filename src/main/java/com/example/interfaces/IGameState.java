@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 
 /**
  * Interface para el estado del juego.
+ * @author David Esteban Valencia
  */
 public interface IGameState {
     String getCurrentWord();

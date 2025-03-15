@@ -8,6 +8,8 @@ import javafx.beans.property.StringProperty;
 
 /**
  * Representa el estado del juego.
+ * @author David Esteban Valencia
+ * @version 1.0.0
  */
 public class GameState implements IGameState {
     private final StringProperty currentWord = new SimpleStringProperty("");

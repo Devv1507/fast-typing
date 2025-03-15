@@ -13,6 +13,8 @@ import com.example.utils.RandomWordGenerator;
 
 /**
  * Controlador para el juego de escritura rápida (fast typing).
+ * @author David Esteban Valencia
+ * @version 1.0.0
  */
 public class GameController {
 

@@ -19,6 +19,8 @@ import javafx.stage.Stage;
 /**
  * Clase principal para la aplicación del juego de escritura.
  * Lanza la aplicación JavaFX.
+ * @author David Esteban Valencia
+ * @version 1.0.0
  */
 public class Main extends Application {
     public static TextField inputField;

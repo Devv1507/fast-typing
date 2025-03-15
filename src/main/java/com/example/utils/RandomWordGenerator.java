@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 
 /**
  * Clase de utilidad para generar palabras aleatorias utilizando la API Random Word.
+ * @author David Esteban Valencia
+ * @version 1.0.0
  */
 public class RandomWordGenerator implements IWordGenerator {
 
