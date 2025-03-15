@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.Duration;
-import com.example.mainClasses.GameState;
+import com.example.utils.GameState;
 import com.example.utils.RandomWordGenerator;
 
 /**
