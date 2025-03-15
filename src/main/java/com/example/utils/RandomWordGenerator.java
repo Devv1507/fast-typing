@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 public class RandomWordGenerator {
 
     private final HttpClient client = HttpClient.newHttpClient();
-    private final String apiUrl = "https://random-word-api.herokuapp.com/word"; // Adjust as needed
+    private final String apiUrl = "https://random-word-api.herokuapp.com/word?lang=es"; // Adjust as needed
 
     /**
      * Generates a random word from an external API.
