@@ -11,7 +11,7 @@ import com.example.utils.GameState;
 import com.example.utils.RandomWordGenerator;
 
 /**
- * Controller class for the Typing Speed Game.
+ * Controlador para el juego de fast typing (escritura rápida)
  */
 public class GameController {
 
@@ -23,6 +23,10 @@ public class GameController {
     private final IntegerProperty errors = new SimpleIntegerProperty(0); // Error counter (global)
     private Timeline timer;
 
+    /**
+     * Constructor de la clase GameController.
+     * Inicializa el estado del juego, el generador de palabras aleatorias y las propiedades observables.
+     */
     public GameController() {
         gameState = new GameState();
         wordGenerator = new RandomWordGenerator();
@@ -32,21 +36,30 @@ public class GameController {
         startNewGame();
     }
 
+    /**
+     * Inicia un nuevo juego, generando una nueva palabra y comenzando el temporizador.
+     */
     public void startNewGame() {
         generateNewWord();
         startTimer();
     }
 
+    /**
+     * Genera una nueva palabra aleatoria utilizando el generador de palabras.
+     */
     private void generateNewWord() {
         gameState.setCurrentWord(wordGenerator.generateWord());
     }
 
+    /**
+     * Inicia el temporizador para la ronda actual.
+     */
     private void startTimer() {
         if (timer != null) {
             timer.stop(); // Stop the existing timer if it's running
         }
         int initialTime = calculateInitialTime();
-        gameState.setTimeLeft(initialTime); // Establecer el valor a través de la propiedad en GameState
+        gameState.setTimeLeft(initialTime);
         timer = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     int currentTime = gameState.getTimeLeft();
@@ -61,6 +74,11 @@ public class GameController {
         timer.play();
     }
 
+    /**
+     * Valida la palabra escrita por el jugador.
+     * @param typedWord La palabra escrita por el jugador en el TextField.
+     * @return true si la palabra es correcta, false si es incorrecta.
+     */
     public boolean submitWord(String typedWord) {
         if (typedWord != null && typedWord.equals(gameState.getCurrentWord())) {
             levelUp();
@@ -72,25 +90,36 @@ public class GameController {
         }
     }
 
+    /**
+     * Incrementa el nivel del juego y comienza una nueva ronda.
+     */
     private void levelUp() {
         gameState.setLevel(gameState.getLevel() + 1);
         startNewGame();
     }
 
+    /**
+     * Finaliza la ronda actual.
+     * En caso de que el tiempo se agote, se evalua la palabra y, en caso de un error, se añade un error al contador.
+     * En caso de que el contador de errores llegue a 4, el juego deja de reiniciarse.
+     */
     private void endRound() {
         timer.stop();
         if (timeLeft.get() == 0) {
-            errorsProperty().set(errorsProperty().get() + 1);
+            errorsProperty().set(errorsProperty().get() + 1); // ACAAAAAAAAA
             System.out.println("Tiempo agotado! Errores: " + errorsProperty().get());
         }
         if (errorsProperty().get() >= 4) {
             System.out.println("Game over in GameController!");
-            // No iniciar un nuevo juego aquí, ya que se acabaron los intentos
         } else {
             startNewGame();
         }
     }
 
+    /**
+     * Calcula el tiempo inicial basado en el nivel actual.
+     * @return El tiempo inicial calculado.
+     */
     private int calculateInitialTime() {
         int currentLevel = gameState.getLevel();
         int time = 20;
@@ -104,23 +133,43 @@ public class GameController {
         return Math.max(2, time);
     }
 
+    /**
+     * Obtiene la propiedad de la palabra actual.
+     * @return La propiedad de la palabra actual.
+     */
     public StringProperty currentWordProperty() {
         return currentWord;
     }
 
+    /**
+     * Obtiene la propiedad del nivel.
+     * @return La propiedad del nivel.
+     */
     public IntegerProperty levelProperty() {
         return level;
     }
 
+    /**
+     * Obtiene la propiedad del tiempo restante.
+     * @return La propiedad del tiempo restante.
+     */
     public IntegerProperty timeLeftProperty() {
         return timeLeft;
     }
 
+    /**
+     * Obtiene la propiedad de los errores.
+     * @return La propiedad de los errores.
+     */
     public IntegerProperty errorsProperty() {
         return errors;
     }
 
-    public int getErrors() {
+    /**
+     * Obtiene el número de errores.
+     * @return El número de errores.
+     */
+    public int getErrorsCount() {
         return errors.get();
     }
 

@@ -18,8 +18,8 @@ import javafx.stage.Stage;
 
 
 /**
- * Main class for the Typing Game application.
- * Launches the JavaFX application.
+ * Clase principal para la aplicación del juego de escritura.
+ * Lanza la aplicación JavaFX.
  */
 public class Main extends Application {
     private final GameController controller = new GameController();
@@ -32,9 +32,20 @@ public class Main extends Application {
     private Label timeLabel;
     private TextField inputField;
     private ImageView eclipseImage;
+    private final String[] eclipseImagePaths = {
+            "/images/eclipse_0.png",
+            "/images/eclipse_25.png",
+            "/images/eclipse_50.png",
+            "/images/eclipse_75.png",
+            "/images/eclipse_100.png"
+    };
 
+    /**
+     * Método principal para iniciar la aplicación JavaFX.
+     * @param primaryStage El escenario principal para la aplicación.
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         createView();
         bindData();
         setupEventHandlers();
@@ -47,15 +58,9 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
-    private final String[] eclipseImagePaths = {
-            "/images/eclipse_0.png",
-            "/images/eclipse_25.png",
-            "/images/eclipse_50.png",
-            "/images/eclipse_75.png",
-            "/images/eclipse_100.png"
-    };
-
+    /**
+     * Crea la vista principal de la aplicación.
+     */
     private void createView() {
         view = new BorderPane();
         view.setPadding(new Insets(20));
@@ -88,17 +93,17 @@ public class Main extends Application {
         view.setTop(topPane);
 
         // Center Section: Phrase and Input
-        VBox centerBox = new VBox(10); // 10px spacing
+        VBox centerBox = new VBox(10);
         centerBox.setAlignment(Pos.CENTER);
         phraseLabel = new Label("Phrase");
-        phraseLabel.setFont(Font.font(48)); // Make the phrase bigger
+        phraseLabel.setFont(Font.font(48));
         inputField = new TextField();
-        inputField.setMaxWidth(600); // Wider input
-        inputField.setAlignment(Pos.CENTER); // Center the text inside the input
+        inputField.setMaxWidth(600);
+        inputField.setAlignment(Pos.CENTER);
 
-        submitButton = new Button("Submit");
-        submitButton.setFont(Font.font(24)); // Enlarge submit button
-        submitButton.setPadding(new Insets(10, 20, 10, 20)); // Add some padding for visual appeal
+        submitButton = new Button("Enviar");
+        submitButton.setFont(Font.font(24));
+        submitButton.setPadding(new Insets(10, 20, 10, 20));
 
         centerBox.getChildren().addAll(phraseLabel, inputField, submitButton);
         view.setCenter(centerBox);
@@ -120,17 +125,28 @@ public class Main extends Application {
         view.setBottom(bottomBox);
     }
 
-
+    /**
+     * Enlaza los datos del controlador con la vista.
+     */
     private void bindData() {
         levelLabel.textProperty().bind(controller.levelProperty().asString("%d"));
         timeLabel.textProperty().bind(controller.timeLeftProperty().asString("%d"));
         phraseLabel.textProperty().bind(controller.currentWordProperty());
     }
 
+    /**
+     * Carga una imagen desde la ruta especificada.
+     * @param path La ruta de la imagen.
+     * @return La imagen cargada.
+     */
     private Image loadImage(String path) {
         return new Image(getClass().getResourceAsStream(path));
     }
 
+    /**
+     * Actualiza la imagen del eclipse basada en el número de errores.
+     * @param errorCount El número de errores.
+     */
     private void updateEclipseImage(int errorCount) {
         if (errorCount >= 0 && errorCount < eclipseImagePaths.length) {
             Image image = loadImage(eclipseImagePaths[errorCount]);
@@ -141,42 +157,51 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Maneja el envío de la palabra escrita por el jugador.
+     */
     private void handleSubmit() {
         String typedWord = inputField.getText();
         if (!controller.submitWord(typedWord)) {
-            updateEclipseImage(controller.getErrors());
+            updateEclipseImage(controller.getErrorsCount());
         }
         inputField.clear();
     }
+
+    /**
+     * Inicia un nuevo juego, restableciendo el estado y habilitando la entrada.
+     */
     private void startNewGame() {
-        // Re-enable input field and submit button
         inputField.setDisable(false);
         submitButton.setDisable(false);
 
-        // Hide game over message and restart button
+        // Oculta el mensaje de fin de juego y el botón de reintento
         gameOverMessage.setVisible(false);
         restartButton.setVisible(false);
 
-        // Set initial values for start new Game
-        controller.errorsProperty().set(0);
-        updateEclipseImage(controller.getErrors());
+        // Establece los valores iniciales para el nuevo juego
+        controller.errorsProperty().set(0); // ACAAAAAAAAA
+        updateEclipseImage(controller.getErrorsCount());
 
-        // Set initial time and then start new game
-        controller.startNewGame(); // Add method to reset the game
+        controller.startNewGame();
     }
 
+    /**
+     * Muestra el mensaje de fin de juego y deshabilita la entrada.
+     */
     private void endGame() {
-        // Show game over message and restart button
         gameOverMessage.setText("¡Ups, se te acabaron los intentos, trata de nuevo!");
         gameOverMessage.setFont(Font.font(20));
         gameOverMessage.setVisible(true);
         restartButton.setVisible(true);
 
-        // Disable input field and submit button
         inputField.setDisable(true);
         submitButton.setDisable(true);
     }
 
+    /**
+     * Configura los controladores de eventos para la vista.
+     */
     private void setupEventHandlers() {
         submitButton.setOnAction(event -> handleSubmit());
         inputField.setOnAction(event -> handleSubmit()); // Enter key
