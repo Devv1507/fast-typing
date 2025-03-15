@@ -50,9 +50,7 @@ public class EclipseProgress {
     }
 
     /**
-     * Recupera la representación de imagen de eclipse apropiada basada en el nivel de error actual.
-     * El método determina la imagen que se devolverá indexando en un array predefinido de
-     * rutas de imagen utilizando el recuento de errores actual, limitado al índice máximo disponible.
+     * Recupera la representación de imagen de eclipse apropiada basada en el nivel de error actual..
      * @return Un objeto Image correspondiente al nivel de error actual. Si el recuento de errores
      *  excede las imágenes disponibles, se devuelve la última imagen en el array.
      */

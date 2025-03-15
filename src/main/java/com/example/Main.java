@@ -10,11 +10,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import java.io.IOException;
+
 
 /**
  * Clase principal para la aplicación del juego de escritura.
@@ -83,11 +86,11 @@ public class Main extends Application {
     private final EclipseProgress eclipseProgress = new EclipseProgress();
 
     /**
-     * Método principal para iniciar la aplicación JavaFX.
+     * Iniciar la aplicación JavaFX.
      * @param primaryStage El escenario principal para la aplicación.
      */
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         createView();
         bindData();
         setupEventHandlers();
@@ -109,23 +112,31 @@ public class Main extends Application {
 
         // Sección superior: Etiquetas de Nivel y Tiempo
         HBox topBox = new HBox(20);
-        topBox.setAlignment(Pos.TOP_RIGHT); // Alineado a la parte superior derecha
+        topBox.setAlignment(Pos.TOP_RIGHT);
         levelLabel = new Label("Nivel: 1");
         timeLabel = new Label("Tiempo: 20");
 
-        HBox levelBox = new HBox(10, new Label("Nivel: "), levelLabel); // Nivel en la parte superior izquierda
+        HBox levelBox = new HBox(10, new Label("Nivel: "), levelLabel);
         levelBox.setAlignment(Pos.TOP_LEFT);
 
-        HBox timeBox = new HBox(10, new Label("Tiempo: "), timeLabel); // Tiempo en la parte superior derecha
+        HBox timeBox = new HBox(10, new Label("Tiempo: "), timeLabel);
         timeBox.setAlignment(Pos.TOP_RIGHT);
 
-        // Imagen del eclipse
+        // Imagen del eclipse dentro de un AnchorPane
         eclipseImage = new ImageView();
-        eclipseImage.setFitWidth(200); // Ajusta el tamaño de la imagen
+        eclipseImage.setFitWidth(200);
         eclipseImage.setFitHeight(200);
         eclipseImage.setImage(eclipseProgress.getEclipseImage());
 
-        HBox eclipseBox = new HBox(10, eclipseImage); // Eclipse en el centro superior
+        AnchorPane eclipsePane = new AnchorPane();
+        eclipsePane.setPrefSize(200, 200); // Tamaño definido del AnchorPane
+        AnchorPane.setTopAnchor(eclipseImage, 0.0);
+        AnchorPane.setLeftAnchor(eclipseImage, 0.0);
+        AnchorPane.setRightAnchor(eclipseImage, 0.0);
+        AnchorPane.setBottomAnchor(eclipseImage, 0.0);
+        eclipsePane.getChildren().add(eclipseImage);
+
+        HBox eclipseBox = new HBox(eclipsePane);
         eclipseBox.setAlignment(Pos.TOP_CENTER);
 
         BorderPane topPane = new BorderPane();
@@ -157,12 +168,12 @@ public class Main extends Application {
         bottomBox.setAlignment(Pos.CENTER);
 
         gameOverMessage = new Label();
-        gameOverMessage.setVisible(false); // Inicialmente oculto
+        gameOverMessage.setVisible(false);
 
         restartButton = new Button("Reintentar");
         restartButton.setFont(Font.font(18));
         restartButton.setOnAction(event -> startNewGame());
-        restartButton.setVisible(false); // Inicialmente oculto
+        restartButton.setVisible(false);
 
         bottomBox.getChildren().addAll(gameOverMessage, restartButton, messageLabel);
         view.setBottom(bottomBox);
