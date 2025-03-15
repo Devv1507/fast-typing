@@ -62,8 +62,8 @@ public class GameView {
 
         // Eclipse Image
         eclipseImage = new ImageView();
-        eclipseImage.setFitWidth(100); // Ajusta el tamaño de la imagen
-        eclipseImage.setFitHeight(100);
+        eclipseImage.setFitWidth(200); // Ajusta el tamaño de la imagen
+        eclipseImage.setFitHeight(200);
 
         HBox eclipseBox = new HBox(10, eclipseImage); // Eclipse on top center
         eclipseBox.setAlignment(Pos.TOP_CENTER);
@@ -101,7 +101,7 @@ public class GameView {
 
         restartButton = new Button("Re-intentar");
         restartButton.setFont(Font.font(18));
-        restartButton.setOnAction(event -> restartGame());
+        restartButton.setOnAction(event -> startNewGame());
         restartButton.setVisible(false); // Initially hidden
 
         bottomBox.getChildren().addAll(gameOverMessage, restartButton, messageLabel);
@@ -139,6 +139,7 @@ public class GameView {
         if (!controller.submitWord(typedWord)) {
             updateEclipseImage(controller.getErrors());
         }
+        inputField.clear();
     }
     private void startNewGame() {
         // Re-enable input field and submit button
@@ -155,9 +156,8 @@ public class GameView {
 
         // Set initial time and then start new game
         controller.startNewGame(); // Add method to reset the game
-
-        inputField.clear();
     }
+
     private void endGame() {
         // Show game over message and restart button
         gameOverMessage.setText("¡Ups, se te acabaron los intentos, trata de nuevo!");
@@ -168,11 +168,6 @@ public class GameView {
         // Disable input field and submit button
         inputField.setDisable(true);
         submitButton.setDisable(true);
-    }
-
-    private void restartGame() {
-        //Start new game
-        startNewGame();
     }
 
     private void setupEventHandlers() {
