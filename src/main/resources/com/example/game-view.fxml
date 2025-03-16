@@ -5,17 +5,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.text.Font?>
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.controller.GameController">
+
+<BorderPane prefHeight="483.0" prefWidth="479.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.GameController">
 
     <!-- Padding general -->
     <padding>
-        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
     <!-- Sección superior -->
@@ -23,21 +23,27 @@
         <BorderPane>
             <left>
                 <HBox alignment="TOP_LEFT" spacing="10">
-                    <Label text="Nivel: "/>
-                    <Label fx:id="levelLabel" text="1"/>
+                    <Label text="Nivel: " />
+                    <Label fx:id="levelLabel" prefWidth="20.0" text="1" />
                 </HBox>
             </left>
 
             <center>
                 <HBox alignment="TOP_CENTER">
-                    <ImageView fx:id="eclipseImage" fitWidth="200" fitHeight="200"/>
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="eclipseImage" fitHeight="200.0" fitWidth="245.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </AnchorPane>
+               </children>
                 </HBox>
             </center>
 
             <right>
                 <HBox alignment="TOP_RIGHT" spacing="10">
-                    <Label text="Tiempo: "/>
-                    <Label fx:id="timeLabel" text="20"/>
+                    <Label text="Tiempo: " />
+                    <Label fx:id="timeLabel" prefWidth="20.0" text="20" />
                 </HBox>
             </right>
         </BorderPane>
@@ -45,20 +51,17 @@
 
     <!-- Sección central -->
     <center>
-        <VBox alignment="CENTER" spacing="10">
+        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="356.0" spacing="10">
             <Label fx:id="phraseLabel" text="Frase">
                 <font>
-                    <Font size="48"/>
+                    <Font size="48" />
                 </font>
             </Label>
-            <TextField fx:id="inputField" maxWidth="600" alignment="CENTER"/>
-            <Button fx:id="submitButton" text="Enviar">
+            <TextField fx:id="inputField" alignment="CENTER" maxWidth="600" prefHeight="25.0" prefWidth="299.0" />
+            <Button fx:id="submitButton" prefHeight="27.0" prefWidth="115.0" text="Enviar">
                 <font>
-                    <Font size="24"/>
+                    <Font size="18.0" />
                 </font>
-                <padding>
-                    <Insets top="10" right="20" bottom="10" left="20"/>
-                </padding>
             </Button>
         </VBox>
     </center>
@@ -66,13 +69,12 @@
     <!-- Sección inferior -->
     <bottom>
         <VBox alignment="CENTER" spacing="10">
-            <Label fx:id="gameOverMessage" visible="false"/>
+            <Label fx:id="messageLabel" visible="false" />
             <Button fx:id="restartButton" text="Reintentar" visible="false">
                 <font>
-                    <Font size="18"/>
+                    <Font size="18" />
                 </font>
             </Button>
-            <Label fx:id="messageLabel"/>
         </VBox>
     </bottom>
 </BorderPane>
