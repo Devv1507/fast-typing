@@ -10,6 +10,10 @@ import com.example.interfaces.IWordGenerator;
  * @author David Esteban Valencia
  */
 public class RandomWordGenerator implements IWordGenerator {
+    /**
+     * Lista predefinida e inmodificable de Strings que representan diversas palabras del español.
+     * Esta lista está diseñada para servir como una colección localizada de palabras.
+     */
     private final List<String> localWords = List.of(
             "manzana", "perro", "gato", "casa", "libro", "silla", "mesa", "puerta", "ventana", "coche",
             "camión", "bicicleta", "moto", "tren", "avión", "barco", "playa", "montaña", "río", "bosque",
@@ -59,15 +63,15 @@ public class RandomWordGenerator implements IWordGenerator {
             "posmodernidad", "singularidad tecnológica", "transhumanismo", "inteligencia artificial", "realidad virtual",
             "ciberespacio", "nanotecnología", "biotecnología", "ingeniería genética", "clonación", "criogenización",
             "colonización espacial", "terraformación", "paradoja de Fermi", "ecuación de Drake", "principio antrópico",
-            "simulación de la realidad", "teoría de cuerdas", "multiverso", "principio de incertidumbre", "efecto mariposa",
+            "simulación de la realidad", "teoría de cuerdas", "multiverso", "incertidumbre", "efecto mariposa",
             "catástrofe", "entropía", "negentropía", "autopoiesis", "emergencia", "sinergia", "holarquía", "fractal",
-            "caos determinista", "complejidad", "sistema adaptativo complejo", "mente colmena", "memética", "viralidad",
-            "influencer", "troleo", "fake news", "posverdad", "economía de la atención", "capitalismo de vigilancia",
+            "caos determinista", "complejidad", "sistema", "mente colmena", "memética", "viralidad",
+            "influencer", "troleo", "fake news", "posverdad", "capitalismo",
             "algoritmo", "sesgo algorítmico", "ética de la IA", "neuroética", "cibercultura", "identidad digital",
             "huella digital", "analfabetismo digital", "brecha digital", "desinformación", "propaganda", "manipulación",
             "censura", "libertad de expresión", "privacidad", "vigilancia masiva", "criptografía", "blockchain",
             "descentralización", "autonomía", "soberanía digital", "commons", "copyleft", "software libre", "open source",
-            "crowdsourcing", "crowdfunding", "economía colaborativa", "procomún", "producción entre pares", "diseño abierto",
+            "crowdsourcing", "crowdfunding", "economía colaborativa", "procomún", "diseño abierto",
             "hardware libre", "biología sintética", "hacktivismo", "activismo digital", "ciberseguridad", "guerra cibernética",
             "quinto poder", "periodismo ciudadano", "wikileaks", "anonymous", "deep web", "dark web", "bitácora",
             "epistemología","heurístico","exégesis","hermenéutica","tautología","anátema", "eutanasia",
@@ -76,7 +80,7 @@ public class RandomWordGenerator implements IWordGenerator {
     private final Random random = new Random();
 
     /**
-     * Genera una palabra aleatoria desde una API externa o una lista local.
+     * Genera una palabra aleatoria de la lista de palabras disponibles.
      * @return Una palabra seleccionada aleatoriamente.
      */
     @Override

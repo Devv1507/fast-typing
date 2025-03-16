@@ -2,12 +2,11 @@ package com.example.utils;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.image.Image;
 
 /**
- * Representa el progreso de una visualización de eclipse basada en los niveles de error.
- * Esta clase mantiene una propiedad de errores y proporciona una representación de imagen
- * correspondiente para cada nivel de error.
+ * Representa el progreso de una visualización de eclipse basada en los errores cometidos.
+ * Esta clase mantiene una propiedad de errores y proporciona rutas de imágenes
+ * correspondientes para cada nivel de error.
  * @author David Esteban Valencia
  */
 public class EclipseProgress {
@@ -25,11 +24,11 @@ public class EclipseProgress {
      * Estas imágenes se indexan para su recuperación según los niveles de error.
      */
     private static final String[] ECLIPSE_IMAGES = {
-            "/images/eclipse_0.png",
-            "/images/eclipse_25.png",
-            "/images/eclipse_50.png",
-            "/images/eclipse_75.png",
-            "/images/eclipse_100.png"
+            "/images/eclipse_0.png",    // 0 errores - 0% eclipse
+            "/images/eclipse_25.png",   // 1 error - 25% eclipse
+            "/images/eclipse_50.png",   // 2 errores - 50% eclipse
+            "/images/eclipse_75.png",   // 3 errores - 75% eclipse
+            "/images/eclipse_100.png"   // 4 errores - 100% eclipse (eclipse total)
     };
 
     /**
@@ -40,22 +39,14 @@ public class EclipseProgress {
         this.errors.set(errors);
     }
 
-    /**
-     * Devuelve la propiedad que representa el número de errores.
-     * El valor de esta propiedad se puede observar y actualizar según sea necesario.
-     * @return la propiedad de errores como un IntegerProperty.
-     */
-    public IntegerProperty errorsProperty() {
-        return errors;
-    }
 
     /**
-     * Recupera la representación de imagen de eclipse apropiada basada en el nivel de error actual..
-     * @return Un objeto Image correspondiente al nivel de error actual. Si el recuento de errores
-     *  excede las imágenes disponibles, se devuelve la última imagen en el array.
+     * Obtiene la ruta de la imagen del eclipse correspondiente a un número específico de errores.
+     * @param errorCount El número de errores para el que se requiere la imagen
+     * @return La ruta de la imagen del eclipse para el número de errores especificado
      */
-    public Image getEclipseImage() {
-        int index = Math.min(errors.get(), ECLIPSE_IMAGES.length - 1);
-        return new Image(getClass().getResourceAsStream(ECLIPSE_IMAGES[index]));
+    public String getEclipseImageForErrors(int errorCount) {
+        int index = Math.min(errorCount, ECLIPSE_IMAGES.length - 1);
+        return ECLIPSE_IMAGES[index];
     }
 }
