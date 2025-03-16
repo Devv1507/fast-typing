@@ -7,7 +7,6 @@ package com.example.interfaces;
 public interface IWordGenerator {
     /**
      * Genera una palabra aleatoria.
-     *
      * @return La palabra aleatoria generada.
      */
     String generateWord();
