@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="483.0" prefWidth="479.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.GameController">
+<BorderPane prefHeight="483.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.GameController">
 
     <!-- Padding general -->
     <padding>
@@ -57,7 +57,7 @@
                     <Font size="48" />
                 </font>
             </Label>
-            <TextField fx:id="inputField" alignment="CENTER" maxWidth="600" prefHeight="25.0" prefWidth="299.0" />
+            <TextField fx:id="inputField" alignment="CENTER" maxWidth="600" prefHeight="25.0" prefWidth="449.0" />
             <Button fx:id="submitButton" prefHeight="27.0" prefWidth="115.0" text="Enviar">
                 <font>
                     <Font size="18.0" />
